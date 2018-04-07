@@ -39,11 +39,13 @@ void OBSBasicTransform::HookWidget(QWidget *widget, const char *signal,
 #define ISCROLL_CHANGED SIGNAL(valueChanged(int))
 #define DSCROLL_CHANGED SIGNAL(valueChanged(double))
 
-OBSBasicTransform::OBSBasicTransform(OBSBasic *parent)
-	: QDialog (parent),
+OBSBasicTransform::OBSBasicTransform(QWidget *parent, OBSScene scene_)
+	: QWidget (parent),
 	  ui      (new Ui::OBSBasicTransform),
-	  main    (parent)
+	 curScene (scene_)
 {
+	main = reinterpret_cast<OBSBasic*>(App()->GetMainWindow());
+
 	ui->setupUi(this);
 
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -63,17 +65,10 @@ OBSBasicTransform::OBSBasicTransform(OBSBasic *parent)
 	HookWidget(ui->cropTop,      ISCROLL_CHANGED, SLOT(OnCropChanged()));
 	HookWidget(ui->cropBottom,   ISCROLL_CHANGED, SLOT(OnCropChanged()));
 
-	ui->buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
-
-	connect(ui->buttonBox->button(QDialogButtonBox::Reset),
-		SIGNAL(clicked()), this, SLOT(on_resetButton_clicked()));
-
 	installEventFilter(CreateShortcutFilter());
 
-	OBSSceneItem item = FindASelectedItem(main->GetCurrentScene());
-	OBSScene scene = obs_sceneitem_get_scene(item);
-	SetScene(scene);
-	SetItem(item);
+	SetScene(curScene);
+	SetItem(FindASelectedItem(curScene));
 
 	channelChangedSignal.Connect(obs_get_signal_handler(), "channel_change",
 			OBSChannelChanged, this);
@@ -303,7 +298,7 @@ void OBSBasicTransform::OnCropChanged()
 	ignoreTransformSignal = false;
 }
 
-void OBSBasicTransform::on_resetButton_clicked()
+void OBSBasicTransform::ResetTransform()
 {
 	main->on_actionResetTransform_triggered();
 }

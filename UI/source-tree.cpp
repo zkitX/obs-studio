@@ -246,7 +246,8 @@ void SourceTreeItem::mouseDoubleClickEvent(QMouseEvent *event)
 		OBSBasic *main =
 			reinterpret_cast<OBSBasic*>(App()->GetMainWindow());
 		if (source) {
-			main->CreatePropertiesWindow(source);
+			main->CreatePropertiesWindow(source,
+					PropertiesType::Source);
 		}
 	}
 }

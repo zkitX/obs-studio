@@ -2599,6 +2599,11 @@ void OBSBasicSettings::LoadHotkeySettings(obs_hotkey_id ignoreKey)
 	using data_t = decltype(data);
 	obs_enum_hotkeys([](void *data, obs_hotkey_id id, obs_hotkey_t *key)
 	{
+		auto registerer_type = obs_hotkey_get_registerer_type(key);
+
+		if (registerer_type == OBS_HOTKEY_REGISTERER_SOURCE)
+			return true;
+
 		data_t &d = *static_cast<data_t*>(data);
 		if (id != get<2>(d))
 			LayoutHotkey(id, key, get<0>(d), get<1>(d));
@@ -2638,10 +2643,14 @@ void OBSBasicSettings::LoadHotkeySettings(obs_hotkey_id ignoreKey)
 	}
 
 	AddHotkeys(*layout, obs_output_get_name, outputs);
-	AddHotkeys(*layout, obs_source_get_name, scenes);
-	AddHotkeys(*layout, obs_source_get_name, sources);
 	AddHotkeys(*layout, obs_encoder_get_name, encoders);
 	AddHotkeys(*layout, obs_service_get_name, services);
+
+	QLabel *otherHotkeys =
+			new QLabel(
+			QTStr("Basic.Settings.OtherHotkeysLocation"));
+	otherHotkeys->setStyleSheet("margin-top: 25px; font-weight:bold;");
+	layout->addRow(otherHotkeys);
 }
 
 void OBSBasicSettings::LoadSettings(bool changedOnly)
