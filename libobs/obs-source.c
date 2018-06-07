@@ -296,7 +296,7 @@ static void obs_source_init_audio_hotkeys(struct obs_source *source)
 
 static obs_source_t *obs_source_create_internal(const char *id,
 		const char *name, obs_data_t *settings,
-		obs_data_t *hotkey_data, bool private)
+		obs_data_t *hotkey_data, bool private, bool dsk)
 {
 	struct obs_source *source = bzalloc(sizeof(struct obs_source));
 
@@ -353,6 +353,8 @@ static obs_source_t *obs_source_create_internal(const char *id,
 	source->flags = source->default_flags;
 	source->enabled = true;
 
+	source->is_dsk = dsk;
+
 	if (!private) {
 		obs_source_dosignal(source, "source_create", NULL);
 	}
@@ -366,16 +368,17 @@ fail:
 }
 
 obs_source_t *obs_source_create(const char *id, const char *name,
-		obs_data_t *settings, obs_data_t *hotkey_data)
+		obs_data_t *settings, obs_data_t *hotkey_data, bool dsk)
 {
 	return obs_source_create_internal(id, name, settings, hotkey_data,
-			false);
+			false, dsk);
 }
 
 obs_source_t *obs_source_create_private(const char *id, const char *name,
 		obs_data_t *settings)
 {
-	return obs_source_create_internal(id, name, settings, NULL, true);
+	return obs_source_create_internal(id, name, settings, NULL, true,
+			false);
 }
 
 static char *get_new_filter_name(obs_source_t *dst, const char *name)
@@ -476,7 +479,8 @@ obs_source_t *obs_source_duplicate(obs_source_t *source,
 
 	new_source = create_private ?
 		obs_source_create_private(source->info.id, new_name, settings) :
-		obs_source_create(source->info.id, new_name, settings, NULL);
+		obs_source_create(source->info.id, new_name, settings, NULL,
+				false);
 
 	new_source->audio_mixers = source->audio_mixers;
 	new_source->sync_offset = source->sync_offset;
@@ -4258,4 +4262,10 @@ float obs_source_get_balance_value(const obs_source_t *source)
 {
 	return obs_source_valid(source, "obs_source_get_balance_value") ?
 		source->balance : 0.5f;
+}
+
+bool obs_source_is_dsk(obs_source_t *source)
+{
+	return obs_source_valid(source, "obs_source_is_dsk") ?
+		source->is_dsk : false;
 }

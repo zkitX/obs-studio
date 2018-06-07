@@ -1706,8 +1706,9 @@ static obs_source_t *obs_load_source_type(obs_data_t *source_data)
 	int          di_order;
 	int          di_mode;
 	int          monitoring_type;
+	bool         dsk = obs_data_get_bool(source_data, "is_dsk");
 
-	source = obs_source_create(id, name, settings, hotkeys);
+	source = obs_source_create(id, name, settings, hotkeys, dsk);
 
 	obs_data_release(hotkeys);
 
@@ -1878,6 +1879,7 @@ obs_data_t *obs_save_source(obs_source_t *source)
 	int        di_mode     = (int)obs_source_get_deinterlace_mode(source);
 	int        di_order    =
 		(int)obs_source_get_deinterlace_field_order(source);
+	bool       dsk         = obs_source_is_dsk(source);
 
 	obs_source_save(source);
 	hotkeys = obs_hotkeys_save_source(source);
@@ -1906,6 +1908,7 @@ obs_data_t *obs_save_source(obs_source_t *source)
 	obs_data_set_int   (source_data, "deinterlace_mode", di_mode);
 	obs_data_set_int   (source_data, "deinterlace_field_order", di_order);
 	obs_data_set_int   (source_data, "monitoring_type", m_type);
+	obs_data_set_bool  (source_data, "is_dsk", dsk);
 
 	obs_data_set_obj(source_data, "private_settings",
 			source->private_settings);
