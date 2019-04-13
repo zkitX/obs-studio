@@ -31,6 +31,7 @@
 #include "window-basic-transform.hpp"
 #include "window-basic-adv-audio.hpp"
 #include "window-basic-filters.hpp"
+#include "media-controls.hpp"
 #include "window-projector.hpp"
 #include "window-basic-about.hpp"
 #include "auth-base.hpp"
@@ -47,6 +48,7 @@ class QMessageBox;
 class QListWidgetItem;
 class VolControl;
 class OBSBasicStats;
+class OBSBasicMediaControls;
 
 #include "ui_OBSBasic.h"
 #include "ui_ColorSelect.h"
@@ -122,6 +124,7 @@ class OBSBasic : public OBSMainWindow {
 	friend class AutoConfig;
 	friend class AutoConfigStreamPage;
 	friend struct OBSStudioAPI;
+	friend class MediaControls;
 
 	enum class MoveDir {
 		Up,
@@ -144,6 +147,7 @@ private:
 	std::shared_ptr<Auth> auth;
 
 	std::vector<VolControl*> volumes;
+	std::vector<MediaControls*> mediaControls;
 
 	std::vector<OBSSignal> signalHandlers;
 
@@ -169,6 +173,10 @@ private:
 	QPointer<OBSBasicAdvAudio> advAudioWindow;
 	QPointer<OBSBasicFilters> filters;
 	QPointer<QDockWidget> statsDock;
+	QPointer<QDockWidget> mediaControlsDock;
+	QPointer<QVBoxLayout> mediaControlsLayout;
+	QPointer<QWidget> mediaControlsContainer;
+	QPointer<QScrollArea> mediaScroll;
 	QPointer<OBSAbout> about;
 
 	QPointer<QTimer>    cpuUsageTimer;
@@ -418,6 +426,8 @@ private:
 
 	bool NoSourcesConfirmation();
 
+	void ClearMediaControls();
+
 public slots:
 	void DeferSaveBegin();
 	void DeferSaveEnd();
@@ -473,6 +483,13 @@ private slots:
 
 	void ActivateAudioSource(OBSSource source);
 	void DeactivateAudioSource(OBSSource source);
+
+	void ShowMediaControls(OBSSource source);
+	void HideMediaControls(OBSSource source);
+	void UnhideMediaControls();
+	void ShowMediaControlsMenu(const QPoint &pos);
+	void MediaControlsDockHidden();
+	void MediaControlsDockShown();
 
 	void DuplicateSelectedScene();
 	void RemoveSelectedScene();
