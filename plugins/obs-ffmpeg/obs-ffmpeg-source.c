@@ -771,6 +771,29 @@ static void *ffmpeg_source_create(obs_data_t *settings, obs_source_t *source)
 	proc_handler_add(ph, "void get_nb_frames(out int num_frames)",
 			get_nb_frames, s);
 
+	/* ------------------------------------- */
+	/* Make source backwards compatible with previous media sources */
+
+	const char *old_input = obs_data_get_string(settings, "local_file");
+	const char *old_url = obs_data_get_string(settings, "input");
+
+	obs_data_array_t *array = obs_data_get_array(settings, "files");
+	obs_data_t *item = obs_data_create();
+
+	if (old_input && *old_input) {
+		obs_data_set_string(item, "value", old_input);
+		obs_data_unset_user_value(settings, "local_file");
+		obs_data_array_insert(array, 0, item);
+	} else if (old_url && *old_url) {
+		obs_data_set_string(item, "value", old_url);
+		obs_data_unset_user_value(settings, "input");
+		obs_data_array_insert(array, 0, item);
+	}
+
+	obs_data_release(item);
+	obs_data_array_release(array);
+
+	set_media_state(s, OBS_MEDIA_STATE_NONE);
 	ffmpeg_source_update(s, settings);
 	return s;
 }
