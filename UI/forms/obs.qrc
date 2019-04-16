@@ -26,6 +26,10 @@
     <file>images/unlocked_mask_2x.png</file>
     <file>images/collapse.png</file>
     <file>images/expand.png</file>
+    <file>images/notifications/info.svg</file>
+    <file>images/notifications/warning.svg</file>
+    <file>images/notifications/error.svg</file>
+    <file>images/notifications/close.svg</file>
   </qresource>
   <qresource prefix="/settings">
     <file>images/settings/output.svg</file>

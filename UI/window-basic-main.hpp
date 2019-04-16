@@ -34,6 +34,7 @@
 #include "window-projector.hpp"
 #include "window-basic-about.hpp"
 #include "auth-base.hpp"
+#include "notifications-widget.hpp"
 
 #include <obs-frontend-internal.hpp>
 
@@ -170,6 +171,8 @@ private:
 	QPointer<OBSBasicFilters> filters;
 	QPointer<QDockWidget> statsDock;
 	QPointer<OBSAbout> about;
+
+	QPointer<QVBoxLayout> notifyLayout;
 
 	QPointer<QTimer>    cpuUsageTimer;
 	os_cpu_usage_info_t *cpuUsageInfo = nullptr;
@@ -642,6 +645,9 @@ public:
 	QAction *AddDockWidget(QDockWidget *dock);
 
 	static OBSBasic *Get();
+
+	void ShowNotification(NotifyType type, QString message,
+		QString buttonText = nullptr, QString url = nullptr);
 
 protected:
 	virtual void closeEvent(QCloseEvent *event) override;

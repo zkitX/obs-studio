@@ -390,6 +390,10 @@ OBSBasic::OBSBasic(QWidget *parent)
 		ui->previewLabel->setHidden(true);
 	else
 		ui->previewLabel->setHidden(!labels);
+
+	notifyLayout = new QVBoxLayout();
+	notifyLayout->setContentsMargins(0, 0, 0, 0);
+	ui->notifications->setLayout(notifyLayout);
 }
 
 static void SaveAudioDevice(const char *name, int channel, obs_data_t *parent,
@@ -7277,4 +7281,13 @@ void SceneRenameDelegate::setEditorData(QWidget *editor,
 	QLineEdit *lineEdit = qobject_cast<QLineEdit*>(editor);
 	if (lineEdit)
 		lineEdit->selectAll();
+}
+
+void OBSBasic::ShowNotification(NotifyType type, QString message,
+		QString buttonText, QString url)
+{
+	OBSNotifications *notify =
+			new OBSNotifications(type, message, buttonText, url);
+
+	notifyLayout->addWidget(notify);
 }

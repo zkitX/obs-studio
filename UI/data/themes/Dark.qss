@@ -718,3 +718,51 @@ OBSBasicSettings {
     qproperty-hotkeysIcon: url(./Dark/settings/hotkeys.svg);
     qproperty-advancedIcon: url(./Dark/settings/advanced.svg);
 }
+
+/* Notifications Widget */
+
+* [themeID="notifyWarning"] {
+    background-color: #f95118;
+}
+
+* [themeID="notifyError"] {
+    background-color: #a33030;
+}
+
+* [themeID="notifyInfo"] {
+    background-color: #5aa359;
+}
+
+* [themeID="notifyButton"] {
+    border: 1px solid #ffffff;
+    background: transparent;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+* [themeID="notifyCloseButton"] {
+    image: url(:/res/images/notifications/close.svg);
+    background: transparent;
+}
+
+* [themeID="notifyText"] {
+    background: transparent;
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+* [themeID="notifyIconInfo"] {
+    image: url(:/res/images/notifications/info.svg);
+    background: transparent;
+}
+
+* [themeID="notifyIconWarning"] {
+    image: url(:/res/images/notifications/warning.svg);
+    background: transparent;
+}
+
+* [themeID="notifyIconError"] {
+    image: url(:/res/images/notifications/error.svg);
+    background: transparent;
+}

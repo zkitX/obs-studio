@@ -39,6 +39,9 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QWidget" name="notifications" native="true"/>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="previewDisabledLabel">
@@ -113,7 +116,7 @@
      <x>0</x>
      <y>0</y>
      <width>1079</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -653,7 +656,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>80</width>
+           <width>64</width>
            <height>16</height>
           </rect>
          </property>
